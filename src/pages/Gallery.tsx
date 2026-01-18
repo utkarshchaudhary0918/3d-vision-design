@@ -5,64 +5,84 @@ import Layout from "@/components/layout/Layout";
 import TiltCard from "@/components/ui/TiltCard";
 import CTASection from "@/components/sections/CTASection";
 
+// Import gallery images
+import yokeAssembly from "@/assets/gallery/yoke-assembly.jpeg";
+import zincBrackets from "@/assets/gallery/zinc-brackets.jpeg";
+import flangeComponents from "@/assets/gallery/flange-components.jpeg";
+import hubAssembly from "@/assets/gallery/hub-assembly.jpeg";
+import starFlange from "@/assets/gallery/star-flange.jpeg";
+import yokeTopView from "@/assets/gallery/yoke-top-view.jpeg";
+import ballJoints from "@/assets/gallery/ball-joints.jpeg";
+import hitchPins from "@/assets/gallery/hitch-pins.jpeg";
+import mountingBracket from "@/assets/gallery/mounting-bracket.jpeg";
+
 const galleryItems = [
   {
     id: 1,
-    title: "Blue Zinc Plated Bolts",
-    category: "Blue Zinc",
-    description: "High-quality blue passivated fasteners for automotive applications.",
+    title: "Precision Yoke Assembly",
+    category: "White Zinc",
+    description: "High-precision yoke assembly with white zinc plating for automotive drivetrain applications.",
+    image: yokeAssembly,
   },
   {
     id: 2,
-    title: "White Zinc Hardware",
+    title: "Zinc Plated Brackets",
     category: "White Zinc",
-    description: "Bright silver finish on precision hardware components.",
+    description: "Industrial brackets with bright silver zinc finish for structural applications.",
+    image: zincBrackets,
   },
   {
     id: 3,
-    title: "Green Zinc Military Parts",
-    category: "Green Zinc",
-    description: "Olive drab finish meeting military specifications.",
+    title: "Flange Components Set",
+    category: "Trivalent",
+    description: "Complete set of flange components with RoHS compliant trivalent coating.",
+    image: flangeComponents,
   },
   {
     id: 4,
-    title: "Black Zinc Components",
-    category: "Black Zinc",
-    description: "Sleek black finish for aesthetic and functional applications.",
+    title: "Hub Assembly",
+    category: "Phosphating",
+    description: "Heavy-duty hub assembly with manganese phosphate coating for enhanced wear resistance.",
+    image: hubAssembly,
   },
   {
     id: 5,
-    title: "Trivalent Coated Parts",
-    category: "Trivalent",
-    description: "RoHS compliant environmentally friendly plating.",
+    title: "Star Flange Plate",
+    category: "White Zinc",
+    description: "Precision-machined star flange with uniform white zinc coating for corrosion protection.",
+    image: starFlange,
   },
   {
     id: 6,
-    title: "Phosphated Gears",
+    title: "Yoke Top View",
     category: "Phosphating",
-    description: "Manganese phosphate coating for enhanced wear resistance.",
+    description: "Forged yoke component with manganese phosphate finish for oil retention and lubricity.",
+    image: yokeTopView,
   },
   {
     id: 7,
-    title: "Automotive Fasteners",
+    title: "Ball Joint Components",
     category: "Blue Zinc",
-    description: "Bulk automotive fasteners with consistent quality finish.",
+    description: "Spherical ball joints with blue passivated zinc plating for suspension systems.",
+    image: ballJoints,
   },
   {
     id: 8,
-    title: "Industrial Brackets",
+    title: "Hitch Pins",
     category: "White Zinc",
-    description: "Structural components with corrosion-resistant coating.",
+    description: "Agricultural and industrial hitch pins with durable zinc plating finish.",
+    image: hitchPins,
   },
   {
     id: 9,
-    title: "Precision Shafts",
-    category: "Phosphating",
-    description: "Machine shafts with superior oil retention properties.",
+    title: "Mounting Bracket",
+    category: "White Zinc",
+    description: "Heavy-duty mounting bracket with bright zinc coating for machinery applications.",
+    image: mountingBracket,
   },
 ];
 
-const categories = ["All", "Blue Zinc", "White Zinc", "Green Zinc", "Black Zinc", "Trivalent", "Phosphating"];
+const categories = ["All", "Blue Zinc", "White Zinc", "Trivalent", "Phosphating"];
 
 const Gallery = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -137,15 +157,13 @@ const Gallery = () => {
                       onClick={() => setSelectedItem(item)}
                       className="cursor-pointer group"
                     >
-                      <div className="aspect-square bg-gradient-to-br from-muted to-accent rounded-xl overflow-hidden relative">
-                        {/* Placeholder for actual images */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center">
-                            <span className="text-4xl font-bold text-primary/40">
-                              {item.id}
-                            </span>
-                          </div>
-                        </div>
+                      <div className="aspect-square bg-muted rounded-xl overflow-hidden relative">
+                        {/* Product Image */}
+                        <img 
+                          src={item.image} 
+                          alt={item.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        />
                         
                         {/* Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -183,15 +201,15 @@ const Gallery = () => {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-card rounded-2xl max-w-2xl w-full overflow-hidden"
+              className="bg-card rounded-2xl max-w-2xl w-full overflow-hidden relative"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="aspect-video bg-gradient-to-br from-muted to-accent flex items-center justify-center">
-                <div className="w-32 h-32 bg-primary/20 rounded-full flex items-center justify-center">
-                  <span className="text-6xl font-bold text-primary/40">
-                    {selectedItem.id}
-                  </span>
-                </div>
+              <div className="aspect-video bg-muted overflow-hidden">
+                <img 
+                  src={selectedItem.image} 
+                  alt={selectedItem.title}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="p-6">
                 <span className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-full">
