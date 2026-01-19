@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
+import ScrollToTop from "@/components/ui/ScrollToTop";
 
 interface LayoutProps {
   children: ReactNode;
@@ -14,6 +15,7 @@ const Layout = ({ children }: LayoutProps) => {
       <main className="flex-1 pt-20">{children}</main>
       <Footer />
       <WhatsAppButton />
+      <ScrollToTop />
     </div>
   );
 };
