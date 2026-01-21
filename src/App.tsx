@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { AnimatePresence } from "framer-motion";
 import PageTransition from "@/components/layout/PageTransition";
+import LoadingCursor from "@/components/ui/LoadingCursor";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Services from "./pages/Services";
@@ -13,7 +14,6 @@ import Gallery from "./pages/Gallery";
 import Clients from "./pages/Clients";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
-
 const queryClient = new QueryClient();
 
 const AnimatedRoutes = () => {
@@ -39,6 +39,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
       <TooltipProvider>
+        <LoadingCursor />
         <Toaster />
         <Sonner />
         <BrowserRouter>
