@@ -43,16 +43,39 @@ const TransitionOverlay = () => {
   return (
     <AnimatePresence>
       {showOverlay && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-[9998] flex items-center justify-center pointer-events-none"
-          style={{
-            background: "linear-gradient(135deg, hsl(0 0% 12% / 0.95) 0%, hsl(0 0% 8% / 0.95) 50%, hsl(0 0% 5% / 0.95) 100%)",
-          }}
-        >
+        <>
+          {/* Left panel slides in from left */}
+          <motion.div
+            initial={{ x: "-100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "-100%" }}
+            transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-y-0 left-0 w-1/2 z-[9998] pointer-events-none"
+            style={{
+              background: "linear-gradient(135deg, hsl(0 0% 12%) 0%, hsl(0 0% 8%) 100%)",
+            }}
+          />
+          
+          {/* Right panel slides in from right */}
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-y-0 right-0 w-1/2 z-[9998] pointer-events-none"
+            style={{
+              background: "linear-gradient(135deg, hsl(0 0% 8%) 0%, hsl(0 0% 12%) 100%)",
+            }}
+          />
+
+          {/* Center content overlay */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, delay: 0.1 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none"
+          >
           {/* Metallic grid pattern overlay */}
           <div 
             className="absolute inset-0 opacity-10"
@@ -166,7 +189,8 @@ const TransitionOverlay = () => {
             animate={{ opacity: 1 }}
             className="absolute bottom-4 right-4 w-12 h-12 border-r-2 border-b-2 border-primary/20" 
           />
-        </motion.div>
+          </motion.div>
+        </>
       )}
     </AnimatePresence>
   );
