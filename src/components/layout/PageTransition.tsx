@@ -52,27 +52,39 @@ const TransitionOverlay = () => {
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-[9997] pointer-events-none bg-background/20"
           />
-          {/* Left panel slides in from left */}
+          {/* Diagonal wipe - top left triangle */}
           <motion.div
-            initial={{ x: "-100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "-100%" }}
-            transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-y-0 left-0 w-1/2 z-[9998] pointer-events-none"
+            initial={{ clipPath: "polygon(0 0, 0 0, 0 0)" }}
+            animate={{ clipPath: "polygon(0 0, 100% 0, 0 100%)" }}
+            exit={{ clipPath: "polygon(0 0, 0 0, 0 0)" }}
+            transition={{ duration: 0.35, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 z-[9998] pointer-events-none"
             style={{
               background: "linear-gradient(135deg, hsl(0 0% 12%) 0%, hsl(0 0% 8%) 100%)",
             }}
           />
           
-          {/* Right panel slides in from right */}
+          {/* Diagonal wipe - bottom right triangle */}
           <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-y-0 right-0 w-1/2 z-[9998] pointer-events-none"
+            initial={{ clipPath: "polygon(100% 100%, 100% 100%, 100% 100%)" }}
+            animate={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
+            exit={{ clipPath: "polygon(100% 100%, 100% 100%, 100% 100%)" }}
+            transition={{ duration: 0.35, ease: [0.76, 0, 0.24, 1], delay: 0.05 }}
+            className="fixed inset-0 z-[9998] pointer-events-none"
             style={{
-              background: "linear-gradient(135deg, hsl(0 0% 8%) 0%, hsl(0 0% 12%) 100%)",
+              background: "linear-gradient(315deg, hsl(0 0% 10%) 0%, hsl(0 0% 6%) 100%)",
+            }}
+          />
+
+          {/* Red accent diagonal line */}
+          <motion.div
+            initial={{ clipPath: "polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%)" }}
+            animate={{ clipPath: "polygon(48% 0, 52% 0, 52% 100%, 48% 100%)" }}
+            exit={{ clipPath: "polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%)" }}
+            transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1], delay: 0.1 }}
+            className="fixed inset-0 z-[9998] pointer-events-none rotate-45 scale-[2]"
+            style={{
+              background: "linear-gradient(180deg, hsl(0 83% 50% / 0.3) 0%, hsl(0 83% 40% / 0.5) 50%, hsl(0 83% 50% / 0.3) 100%)",
             }}
           />
 
