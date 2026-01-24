@@ -4,6 +4,7 @@ import Footer from "./Footer";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import ScrollToTop from "@/components/ui/ScrollToTop";
 import MobileCTABar from "@/components/ui/MobileCTABar";
+import ScrollProgressIndicator from "@/components/ui/ScrollProgressIndicator";
 
 interface LayoutProps {
   children: ReactNode;
@@ -12,6 +13,7 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col">
+      <ScrollProgressIndicator />
       <Header />
       <main className="flex-1 pt-20 pb-20 md:pb-0">{children}</main>
       <Footer />
