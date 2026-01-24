@@ -44,6 +44,14 @@ const TransitionOverlay = () => {
     <AnimatePresence>
       {showOverlay && (
         <>
+          {/* Background blur overlay */}
+          <motion.div
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            animate={{ opacity: 1, backdropFilter: "blur(8px)" }}
+            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[9997] pointer-events-none bg-background/20"
+          />
           {/* Left panel slides in from left */}
           <motion.div
             initial={{ x: "-100%" }}
