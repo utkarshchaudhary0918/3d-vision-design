@@ -36,7 +36,7 @@ const TransitionOverlay = () => {
     setShowOverlay(true);
     const timer = setTimeout(() => {
       setShowOverlay(false);
-    }, 600);
+    }, 800);
     return () => clearTimeout(timer);
   }, [location.pathname]);
 
