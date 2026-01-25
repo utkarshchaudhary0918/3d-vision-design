@@ -43,16 +43,51 @@ const TransitionOverlay = () => {
   return (
     <AnimatePresence>
       {showOverlay && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none"
-          style={{
-            background: "linear-gradient(135deg, hsl(0 0% 12%) 0%, hsl(0 0% 8%) 50%, hsl(0 0% 5%) 100%)",
-          }}
-        >
+        <>
+          {/* Diagonal wipe - top left triangle */}
+          <motion.div
+            initial={{ clipPath: "polygon(0 0, 0 0, 0 0)" }}
+            animate={{ clipPath: "polygon(0 0, 100% 0, 0 100%)" }}
+            exit={{ clipPath: "polygon(0 0, 0 0, 0 0)" }}
+            transition={{ duration: 0.35, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 z-[9998] pointer-events-none"
+            style={{
+              background: "linear-gradient(135deg, hsl(0 0% 12%) 0%, hsl(0 0% 8%) 100%)",
+            }}
+          />
+          
+          {/* Diagonal wipe - bottom right triangle */}
+          <motion.div
+            initial={{ clipPath: "polygon(100% 100%, 100% 100%, 100% 100%)" }}
+            animate={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
+            exit={{ clipPath: "polygon(100% 100%, 100% 100%, 100% 100%)" }}
+            transition={{ duration: 0.35, ease: [0.76, 0, 0.24, 1], delay: 0.05 }}
+            className="fixed inset-0 z-[9998] pointer-events-none"
+            style={{
+              background: "linear-gradient(315deg, hsl(0 0% 10%) 0%, hsl(0 0% 6%) 100%)",
+            }}
+          />
+
+          {/* Red accent diagonal line */}
+          <motion.div
+            initial={{ clipPath: "polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%)" }}
+            animate={{ clipPath: "polygon(48% 0, 52% 0, 52% 100%, 48% 100%)" }}
+            exit={{ clipPath: "polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%)" }}
+            transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1], delay: 0.1 }}
+            className="fixed inset-0 z-[9998] pointer-events-none rotate-45 scale-[2]"
+            style={{
+              background: "linear-gradient(180deg, hsl(0 83% 50% / 0.3) 0%, hsl(0 83% 40% / 0.5) 50%, hsl(0 83% 50% / 0.3) 100%)",
+            }}
+          />
+
+          {/* Center content overlay */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, delay: 0.1 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none"
+          >
           {/* Metallic grid pattern overlay */}
           <div 
             className="absolute inset-0 opacity-10"
@@ -170,11 +205,13 @@ const TransitionOverlay = () => {
             transition={{ delay: 0.25 }}
             className="absolute bottom-6 right-6 w-16 h-16 border-r-2 border-b-2 border-primary/30" 
           />
-        </motion.div>
+          </motion.div>
+        </>
       )}
     </AnimatePresence>
   );
 };
+
 
 const PageTransition = ({ children }: PageTransitionProps) => {
   return (
