@@ -7,16 +7,15 @@ interface PageTransitionProps {
   children: ReactNode;
 }
 
-// Generate random spark particles
+// Generate random spark particles for radial burst
 const generateSparks = (count: number) => {
   return Array.from({ length: count }, (_, i) => ({
     id: i,
-    delay: Math.random() * 0.3,
-    duration: 0.4 + Math.random() * 0.3,
-    offsetX: (Math.random() - 0.5) * 40,
-    offsetY: (Math.random() - 0.5) * 40,
+    delay: Math.random() * 0.2,
+    duration: 0.5 + Math.random() * 0.3,
+    angle: (i / count) * 360 + (Math.random() - 0.5) * 30,
+    distance: 150 + Math.random() * 100,
     size: 2 + Math.random() * 4,
-    startPosition: Math.random() * 100,
   }));
 };
 
@@ -68,97 +67,110 @@ const TransitionOverlay = () => {
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-[9997] pointer-events-none bg-background/20"
           />
-          {/* Diagonal wipe - top left triangle */}
+          {/* Circular reveal - main background */}
           <motion.div
-            initial={{ clipPath: "polygon(0 0, 0 0, 0 0)" }}
-            animate={{ clipPath: "polygon(0 0, 100% 0, 0 100%)" }}
-            exit={{ clipPath: "polygon(0 0, 0 0, 0 0)" }}
-            transition={{ duration: 0.35, ease: [0.76, 0, 0.24, 1] }}
+            initial={{ clipPath: "circle(0% at 50% 50%)" }}
+            animate={{ clipPath: "circle(150% at 50% 50%)" }}
+            exit={{ clipPath: "circle(0% at 50% 50%)" }}
+            transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
             className="fixed inset-0 z-[9998] pointer-events-none"
             style={{
-              background: "linear-gradient(135deg, hsl(0 0% 12%) 0%, hsl(0 0% 8%) 100%)",
+              background: "radial-gradient(circle at center, hsl(0 0% 10%) 0%, hsl(0 0% 6%) 100%)",
             }}
           />
           
-          {/* Diagonal wipe - bottom right triangle */}
+          {/* Red accent ring that expands */}
           <motion.div
-            initial={{ clipPath: "polygon(100% 100%, 100% 100%, 100% 100%)" }}
-            animate={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
-            exit={{ clipPath: "polygon(100% 100%, 100% 100%, 100% 100%)" }}
-            transition={{ duration: 0.35, ease: [0.76, 0, 0.24, 1], delay: 0.05 }}
+            initial={{ clipPath: "circle(0% at 50% 50%)" }}
+            animate={{ clipPath: "circle(150% at 50% 50%)" }}
+            exit={{ clipPath: "circle(0% at 50% 50%)" }}
+            transition={{ duration: 0.45, ease: [0.76, 0, 0.24, 1], delay: 0.05 }}
             className="fixed inset-0 z-[9998] pointer-events-none"
             style={{
-              background: "linear-gradient(315deg, hsl(0 0% 10%) 0%, hsl(0 0% 6%) 100%)",
+              background: "radial-gradient(circle at center, transparent 0%, transparent 48%, hsl(0 83% 50% / 0.4) 49%, hsl(0 83% 50% / 0.6) 50%, hsl(0 83% 50% / 0.4) 51%, transparent 52%, transparent 100%)",
             }}
           />
 
-          {/* Red accent diagonal line */}
+          {/* Outer glow ring */}
           <motion.div
-            initial={{ clipPath: "polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%)" }}
-            animate={{ clipPath: "polygon(48% 0, 52% 0, 52% 100%, 48% 100%)" }}
-            exit={{ clipPath: "polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%)" }}
-            transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1], delay: 0.1 }}
-            className="fixed inset-0 z-[9998] pointer-events-none rotate-45 scale-[2]"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 3, opacity: [0, 0.5, 0] }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
+            className="fixed z-[9998] pointer-events-none"
             style={{
-              background: "linear-gradient(180deg, hsl(0 83% 50% / 0.3) 0%, hsl(0 83% 40% / 0.5) 50%, hsl(0 83% 50% / 0.3) 100%)",
+              left: "50%",
+              top: "50%",
+              width: "200px",
+              height: "200px",
+              marginLeft: "-100px",
+              marginTop: "-100px",
+              borderRadius: "50%",
+              border: "2px solid hsl(0 83% 50% / 0.5)",
+              boxShadow: "0 0 40px hsl(0 83% 50% / 0.3), inset 0 0 40px hsl(0 83% 50% / 0.2)",
             }}
           />
 
-          {/* Spark particles flying along the diagonal */}
+          {/* Spark particles bursting outward from center */}
           <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden">
-            {sparks.map((spark) => (
-              <motion.div
-                key={spark.id}
-                className="absolute"
-                initial={{ 
-                  top: "-5%",
-                  left: `${spark.startPosition}%`,
-                  opacity: 0,
-                  scale: 0,
-                }}
-                animate={{ 
-                  top: "105%",
-                  left: `${spark.startPosition - 50}%`,
-                  opacity: [0, 1, 1, 0],
-                  scale: [0, 1.2, 1, 0],
-                }}
-                transition={{ 
-                  duration: spark.duration,
-                  delay: 0.1 + spark.delay,
-                  ease: "easeOut",
-                }}
-                style={{
-                  transform: `translate(${spark.offsetX}px, ${spark.offsetY}px)`,
-                }}
-              >
-                {/* Spark core */}
-                <div 
-                  className="rounded-full"
-                  style={{
-                    width: spark.size,
-                    height: spark.size,
-                    background: "radial-gradient(circle, hsl(0 83% 70%) 0%, hsl(0 83% 50%) 50%, transparent 100%)",
-                    boxShadow: `0 0 ${spark.size * 2}px hsl(0 83% 50%), 0 0 ${spark.size * 4}px hsl(0 83% 40% / 0.5)`,
-                  }}
-                />
-                {/* Spark trail */}
+            {sparks.map((spark) => {
+              const radians = (spark.angle * Math.PI) / 180;
+              const endX = Math.cos(radians) * spark.distance;
+              const endY = Math.sin(radians) * spark.distance;
+              
+              return (
                 <motion.div
-                  className="absolute top-0 left-1/2 -translate-x-1/2"
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: spark.size * 8, opacity: [0, 0.6, 0] }}
+                  key={spark.id}
+                  className="absolute left-1/2 top-1/2"
+                  initial={{ 
+                    x: 0,
+                    y: 0,
+                    opacity: 0,
+                    scale: 0,
+                  }}
+                  animate={{ 
+                    x: endX,
+                    y: endY,
+                    opacity: [0, 1, 1, 0],
+                    scale: [0, 1.5, 1, 0],
+                  }}
                   transition={{ 
-                    duration: spark.duration * 0.8,
-                    delay: 0.1 + spark.delay,
+                    duration: spark.duration,
+                    delay: 0.15 + spark.delay,
                     ease: "easeOut",
                   }}
-                  style={{
-                    width: spark.size * 0.5,
-                    background: `linear-gradient(to bottom, hsl(0 83% 60% / 0.8), transparent)`,
-                    borderRadius: spark.size,
-                  }}
-                />
-              </motion.div>
-            ))}
+                >
+                  {/* Spark core */}
+                  <div 
+                    className="rounded-full -translate-x-1/2 -translate-y-1/2"
+                    style={{
+                      width: spark.size,
+                      height: spark.size,
+                      background: "radial-gradient(circle, hsl(0 83% 70%) 0%, hsl(0 83% 50%) 50%, transparent 100%)",
+                      boxShadow: `0 0 ${spark.size * 2}px hsl(0 83% 50%), 0 0 ${spark.size * 4}px hsl(0 83% 40% / 0.5)`,
+                    }}
+                  />
+                  {/* Spark trail */}
+                  <motion.div
+                    className="absolute top-1/2 left-1/2 origin-center"
+                    style={{
+                      width: spark.size * 0.5,
+                      height: spark.size * 12,
+                      background: `linear-gradient(to bottom, transparent, hsl(0 83% 60% / 0.6), transparent)`,
+                      borderRadius: spark.size,
+                      transform: `translate(-50%, -50%) rotate(${spark.angle + 90}deg)`,
+                    }}
+                    initial={{ scaleY: 0, opacity: 0 }}
+                    animate={{ scaleY: [0, 1, 0], opacity: [0, 0.8, 0] }}
+                    transition={{ 
+                      duration: spark.duration * 0.6,
+                      delay: 0.15 + spark.delay,
+                      ease: "easeOut",
+                    }}
+                  />
+                </motion.div>
+              );
+            })}
           </div>
 
           {/* Center content overlay */}
