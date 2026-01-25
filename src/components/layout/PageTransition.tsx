@@ -1,11 +1,24 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ReactNode, useState, useEffect } from "react";
+import { ReactNode, useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { Cog, Settings } from "lucide-react";
 
 interface PageTransitionProps {
   children: ReactNode;
 }
+
+// Generate random spark particles
+const generateSparks = (count: number) => {
+  return Array.from({ length: count }, (_, i) => ({
+    id: i,
+    delay: Math.random() * 0.3,
+    duration: 0.4 + Math.random() * 0.3,
+    offsetX: (Math.random() - 0.5) * 40,
+    offsetY: (Math.random() - 0.5) * 40,
+    size: 2 + Math.random() * 4,
+    startPosition: Math.random() * 100,
+  }));
+};
 
 const pageVariants = {
   initial: {
@@ -31,6 +44,9 @@ const pageTransition = {
 const TransitionOverlay = () => {
   const [showOverlay, setShowOverlay] = useState(true);
   const location = useLocation();
+  
+  // Memoize sparks so they regenerate on each route change
+  const sparks = useMemo(() => generateSparks(12), [location.pathname]);
 
   useEffect(() => {
     setShowOverlay(true);
@@ -87,6 +103,63 @@ const TransitionOverlay = () => {
               background: "linear-gradient(180deg, hsl(0 83% 50% / 0.3) 0%, hsl(0 83% 40% / 0.5) 50%, hsl(0 83% 50% / 0.3) 100%)",
             }}
           />
+
+          {/* Spark particles flying along the diagonal */}
+          <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden">
+            {sparks.map((spark) => (
+              <motion.div
+                key={spark.id}
+                className="absolute"
+                initial={{ 
+                  top: "-5%",
+                  left: `${spark.startPosition}%`,
+                  opacity: 0,
+                  scale: 0,
+                }}
+                animate={{ 
+                  top: "105%",
+                  left: `${spark.startPosition - 50}%`,
+                  opacity: [0, 1, 1, 0],
+                  scale: [0, 1.2, 1, 0],
+                }}
+                transition={{ 
+                  duration: spark.duration,
+                  delay: 0.1 + spark.delay,
+                  ease: "easeOut",
+                }}
+                style={{
+                  transform: `translate(${spark.offsetX}px, ${spark.offsetY}px)`,
+                }}
+              >
+                {/* Spark core */}
+                <div 
+                  className="rounded-full"
+                  style={{
+                    width: spark.size,
+                    height: spark.size,
+                    background: "radial-gradient(circle, hsl(0 83% 70%) 0%, hsl(0 83% 50%) 50%, transparent 100%)",
+                    boxShadow: `0 0 ${spark.size * 2}px hsl(0 83% 50%), 0 0 ${spark.size * 4}px hsl(0 83% 40% / 0.5)`,
+                  }}
+                />
+                {/* Spark trail */}
+                <motion.div
+                  className="absolute top-0 left-1/2 -translate-x-1/2"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: spark.size * 8, opacity: [0, 0.6, 0] }}
+                  transition={{ 
+                    duration: spark.duration * 0.8,
+                    delay: 0.1 + spark.delay,
+                    ease: "easeOut",
+                  }}
+                  style={{
+                    width: spark.size * 0.5,
+                    background: `linear-gradient(to bottom, hsl(0 83% 60% / 0.8), transparent)`,
+                    borderRadius: spark.size,
+                  }}
+                />
+              </motion.div>
+            ))}
+          </div>
 
           {/* Center content overlay */}
           <motion.div
